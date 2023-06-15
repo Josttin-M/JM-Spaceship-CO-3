@@ -1,6 +1,7 @@
 import pygame
 import random
 from pygame.sprite import Sprite
+from game.components.bullets.bullet import Bullet
 
 from game.utils.constants import ENEMY_1, ENEMY_TYPE, SCREEN_HEIGHT, SCREEN_WIDTH
 
@@ -27,9 +28,11 @@ class Enemy(Sprite):
         self.movement = random.choice(self.MOVEMENTS)
         self.move_x = random.randint(30 , 100)
         self.moving_index = 0
+        self.shooting_time = random.randint(30, 50)
 
-    def update(self, ships):
+    def update(self, ships, game):
         self.rect.y += self.speed_y
+        self.shoot(game.bullet_manager)
 
         if self.movement == LEFT:
             self.rect.x -= self.speed_x
@@ -53,3 +56,10 @@ class Enemy(Sprite):
 
     def draw(self, screen):
         screen.blit(self.image ,(self.rect.x, self.rect.y))
+
+    def shoot(self, bullet_manager):
+        current_time = pygame.time.get_ticks()
+        if self.shooting_time <= current_time:
+            bullet = Bullet(self)
+            bullet_manager.add_bullet(bullet)
+            self.shooting_time += random.randint(30, 50)
