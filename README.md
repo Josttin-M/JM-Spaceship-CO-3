@@ -1,5 +1,3 @@
 # JM-Spaceship-CO-3
 
-<p align="center">
-  <img src="https://github.com/Josttin-M/JM-Spaceship-CO-3/assets/136290538/f9d10d23-a418-46bd-86e8-23004e90f2ad">
-</p>
+![Spaceship](https://github.com/Josttin-M/JM-Spaceship-CO-3/assets/136290538/c05daea4-7e51-4a62-b25c-5efca3ced226)
