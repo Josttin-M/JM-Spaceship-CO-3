@@ -5,9 +5,9 @@ from game.components.bullets.bullet import Bullet
 
 from game.utils.constants import ENEMY_1, ENEMY_TYPE, SCREEN_HEIGHT, SCREEN_WIDTH
 
-
 LEFT = 'left'
 RIGHT = 'right'
+
 class Enemy(Sprite):
     MOVEMENTS = [LEFT, RIGHT]
     X_POS_LIST = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550]
@@ -16,7 +16,7 @@ class Enemy(Sprite):
     SPEED_Y = 1
 
     def __init__(self):
-        self.image = pygame.transform.scale(ENEMY_1, (50, 50))
+        self.image = pygame.transform.scale(ENEMY_1, (80, 80))
         self.rect = self.image.get_rect()
         self.rect.x = random.choice(self.X_POS_LIST)
         self.rect.y = self.Y_POS
