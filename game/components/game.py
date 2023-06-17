@@ -1,7 +1,9 @@
 import pygame
+
 from game.components.bullets.bullet_manager import BulletManager
 from game.components.enemies.enemy_manager import EnemyManager
 from game.components.menu import Menu
+from game.components.powerups.power_up_manager import PowerUpManager
 from game.components.spaceship import Spaceship
 from game.components.stats import Stats
 
@@ -9,6 +11,7 @@ from game.utils.constants import BG, FONT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WID
 
 
 class Game:
+    
     def __init__(self):
         pygame.init()
         pygame.display.set_caption(TITLE)
@@ -25,6 +28,7 @@ class Game:
         self.enemy_manager = EnemyManager()
         self.bullet_manager = BulletManager()
         self.menu = Menu("-- Press any key to start --", text_size=35)
+        self.power_up_manager = PowerUpManager()
 
     def run(self):
         # Game loop: events - update - draw
@@ -54,6 +58,7 @@ class Game:
         self.player.update(self, user_input)
         self.enemy_manager.update(self)
         self.bullet_manager.update(self)
+        self.power_up_manager.update(self)
 
     def draw(self):
         self.clock.tick(FPS)
@@ -63,6 +68,7 @@ class Game:
         self.player.draw(self.screen)
         self.enemy_manager.draw(self.screen)
         self.bullet_manager.draw(self.screen)
+        self.power_up_manager.draw(self.screen)
         pygame.display.update()
         pygame.display.flip()
 
@@ -85,8 +91,8 @@ class Game:
 
     def show_menu(self):
         if self.stats.death_count > 0:
-            self.menu.update_message(f"--- Press any key to restart the game ---")
-            self.menu.update_stats(f"Score: {self.stats.score}   Max score: {self.stats.get_max_score()}   Deaths: {self.stats.death_count}")
+            self.menu.update_message(f"-- Press any key to restart the game --")
+            self.menu.update_stats(f"Score: {self.stats.score}   Max score: {self.stats.max_score}   Deaths: {self.stats.death_count}")
         self.menu.draw(self.screen)
         self.menu.events(self.on_close, self.play)
 
@@ -97,3 +103,4 @@ class Game:
     def reset_play(self):
         self.enemy_manager.reset()
         self.stats.reset_stats()
+        self.power_up_manager.reset()

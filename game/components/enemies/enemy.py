@@ -1,5 +1,6 @@
 import pygame
 import random
+
 from pygame.sprite import Sprite
 from game.components.bullets.bullet import Bullet
 
@@ -9,6 +10,7 @@ LEFT = 'left'
 RIGHT = 'right'
 
 class Enemy(Sprite):
+    
     MOVEMENTS = [LEFT, RIGHT]
     X_POS_LIST = [50, 100, 150, 200, 250, 300, 350, 400, 450, 500, 550]
     Y_POS = 20
@@ -63,3 +65,4 @@ class Enemy(Sprite):
             bullet = Bullet(self)
             bullet_manager.add_bullet(bullet)
             self.shooting_time += random.randint(30, 50)
+            

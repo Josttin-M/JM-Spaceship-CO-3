@@ -1,5 +1,6 @@
 import pygame
 import math
+
 from game.components.enemies.enemy import Enemy
 
 from game.utils.constants import ENEMY_4, SCREEN_HEIGHT, SCREEN_WIDTH

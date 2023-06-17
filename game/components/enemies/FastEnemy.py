@@ -1,7 +1,7 @@
 import pygame
 import math
-from game.components.enemies.enemy import Enemy
 
+from game.components.enemies.enemy import Enemy
 from game.utils.constants import ENEMY_2, SCREEN_HEIGHT, SCREEN_WIDTH
 
 LEFT = 'left'

@@ -5,6 +5,7 @@ from game.components.enemies.meteorite import meteorite
 
 
 class EnemyManager:
+    
     def __init__(self):
         self.enemies: list[Enemy] = []
 

@@ -1,6 +1,7 @@
 import pygame
 from game.utils.constants import FONT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WIDTH
 
+
 class Menu:
     
     HALF_SCREEN_WIDTH = SCREEN_WIDTH // 2
@@ -8,7 +9,7 @@ class Menu:
 
     def __init__(self, message, stats_message="", text_size = 30):
         self.font = pygame.font.Font(FONT_STYLE, text_size)
-        self.icon = pygame.transform.scale(ICON, (100, 85))
+        self.icon = pygame.transform.scale(ICON, (100, 95))
         self.icon_rect = self.icon.get_rect()
         self.icon_rect.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT - 100)
         self.update_message(message)
@@ -28,14 +29,15 @@ class Menu:
         screen.blit(self.stats_message, self.stats_message_rect)
         pygame.display.update()
 
+    def update_text(self, message, center_pos):
+        text = self.font.render(message, True, (0, 0, 0))
+        text_rect = text.get_rect(center=center_pos)
+        return text, text_rect
+
     def update_message(self, message):
         self.message = message
-        self.text = self.font.render(self.message, True, (0, 0, 0))
-        self.text_rect = self.text.get_rect()
-        self.text_rect.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT)
+        self.text, self.text_rect = self.update_text(message, (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT))
 
     def update_stats(self, stats_message):
         self.stats_message = stats_message
-        self.stats_message = self.font.render(self.stats_message, True, (0, 0, 0))
-        self.stats_message_rect = self.stats_message.get_rect()
-        self.stats_message_rect.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT + 100)
+        self.stats_message, self.stats_message_rect = self.update_text(stats_message, (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT + 100))
