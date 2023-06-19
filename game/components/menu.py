@@ -1,43 +1,59 @@
 import pygame
-from game.utils.constants import FONT_STYLE, ICON, SCREEN_HEIGHT, SCREEN_WIDTH
-
+from game.utils.constants import FONT_STYLE, SCREEN_HEIGHT, SCREEN_WIDTH, IMG_M
 
 class Menu:
-    
-    HALF_SCREEN_WIDTH = SCREEN_WIDTH // 2
     HALF_SCREEN_HEIGHT = SCREEN_HEIGHT // 2
+    HALF_SCREEN_WIDTH = SCREEN_WIDTH // 2
 
-    def __init__(self, message, stats_message="", text_size = 30):
-        self.font = pygame.font.Font(FONT_STYLE, text_size)
-        self.icon = pygame.transform.scale(ICON, (100, 95))
-        self.icon_rect = self.icon.get_rect()
-        self.icon_rect.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT - 100)
-        self.update_message(message)
-        self.update_stats(stats_message)
+    def __init__(self, message, screen):
+        screen.fill((255, 255, 255))
+        self.font = pygame.font.Font(FONT_STYLE, 30)
+        self.text = self.font.render(message, True, (255, 255, 255))
+        self.text_rect = self.text.get_rect()
+        self.text_rect.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT)
+        self.actualscreen = False
+        self.score = 0
+        self.highscore = 0
+        self.deaths = 0
+        self.front_page_ = pygame.transform.scale(IMG_M, (SCREEN_WIDTH, SCREEN_HEIGHT))
 
-    def events(self, on_close, on_start):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                on_close()
-            elif event.type == pygame.KEYDOWN:
-                on_start()
+    def update(self, game):
+        pygame.display.update()
+        self.handle_events_on_menu(game)
 
     def draw(self, screen):
-        screen.fill((255, 255, 255))
         screen.blit(self.text, self.text_rect)
-        screen.blit(self.icon, self.icon_rect)
-        screen.blit(self.stats_message, self.stats_message_rect)
-        pygame.display.update()
+        screen.blit(self.front_page_, (0, 0))
+        if self.actualscreen:
+            screen.blit(self.score, self.text_rect2)
+            screen.blit(self.highscore, self.text_rect3)
+            screen.blit(self.deaths, self.text_rect4)
 
-    def update_text(self, message, center_pos):
-        text = self.font.render(message, True, (0, 0, 0))
-        text_rect = text.get_rect(center=center_pos)
-        return text, text_rect
+    def handle_events_on_menu(self, game):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                game.playing = False
+                game.running = False
+            elif event.type == pygame.KEYDOWN:
+                game.run()
+
+    def reset_screen_color(self, screen):
+        screen.fill((255, 255, 255))
 
     def update_message(self, message):
-        self.message = message
-        self.text, self.text_rect = self.update_text(message, (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT))
+        self.text = self.font.render(message, True, (0, 0, 0))
+        self.text_rect = self.text.get_rect()
+        self.text_rect.center = (self.HALF_SCREEN_WIDTH + 20, self.HALF_SCREEN_HEIGHT)
 
-    def update_stats(self, stats_message):
-        self.stats_message = stats_message
-        self.stats_message, self.stats_message_rect = self.update_text(stats_message, (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT + 100))
+    def show_scores(self, score, highscore, deaths):
+        self.score = self.font.render("Your score: " + score, True, (255, 255, 255))
+        self.text_rect2 = self.score.get_rect()
+        self.text_rect2.center = (self.HALF_SCREEN_WIDTH - 250, self.HALF_SCREEN_HEIGHT + 215)
+
+        self.highscore = self.font.render("Highest score: " + highscore, True, (255, 255, 255))
+        self.text_rect3 = self.highscore.get_rect()
+        self.text_rect3.center = (self.HALF_SCREEN_WIDTH, self.HALF_SCREEN_HEIGHT + 215)
+
+        self.deaths = self.font.render("Total deaths: " + deaths, True, (255, 255, 255))
+        self.text_rect4 = self.deaths.get_rect()
+        self.text_rect4.center = (self.HALF_SCREEN_WIDTH + 250, self.HALF_SCREEN_HEIGHT + 215)

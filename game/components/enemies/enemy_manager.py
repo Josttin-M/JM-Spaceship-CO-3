@@ -1,21 +1,18 @@
+import random
+import time
+import pygame
 from game.components.enemies.enemy import Enemy
-from game.components.enemies.FastEnemy import FastEnemy
-from game.components.enemies.SlowEnemy import SlowEnemy
-from game.components.enemies.meteorite import meteorite
+from game.components.explosion import Explosion
+from game.utils.constants import SOUND_EXPLOSION
 
 
 class EnemyManager:
-    
     def __init__(self):
-        self.enemies: list[Enemy] = []
+        self.enemies = []
+        self.last_enemy_time = time.time()
 
     def update(self, game):
-        if not self.enemies: # [] {} 0 "" -> false | [1] {1: 1} 1 -2 "a" -> true
-            self.enemies.append(Enemy())
-            self.enemies.append(FastEnemy())
-            self.enemies.append(SlowEnemy())
-            self.enemies.append(meteorite())
-
+        self.add_enemy()
         for enemy in self.enemies:
             enemy.update(self.enemies, game)
 
@@ -23,11 +20,25 @@ class EnemyManager:
         for enemy in self.enemies:
             enemy.draw(screen)
 
-    def get_enemies(self):
-        return self.enemies
-    
-    def remove_enemy(self, enemy):
-        self.enemies.remove(enemy)
+    def add_enemy(self):
+        if len(self.enemies) < 1 or time.time() - self.last_enemy_time >= 2:
+            self.SPEED_Y = random.randint(1, 5)
+            self.SPEED_X = random.randint(1, 8)
+            enemy = Enemy(self.SPEED_Y, self.SPEED_X)
+            self.enemies.append(enemy)
+            self.last_enemy_time = time.time()
+
+    def destroy_enemy(self, bullet, game):
+        for enemy in self.enemies:
+            if enemy.rect.colliderect(bullet.rect):
+                self.enemies.remove(enemy)
+                expl = Explosion(enemy.rect.center)
+                game.all_sprites.add(expl)
+                sound_explosion = pygame.mixer.Sound(SOUND_EXPLOSION)
+                pygame.mixer.Sound.play(sound_explosion)
+                score = game.scoremanager.update_score()
+                game.scoremanager.scorelist(score)
+                return True
 
     def reset(self):
         self.enemies = []
